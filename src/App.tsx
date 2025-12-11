@@ -63,7 +63,7 @@ function App() {
   // 1) Welcome
   if (phase === "welcome") {
     return (
-      <main className="fade-in">
+      <main className="fade-in welcome-screen">
         <h1>Crypto Jargon Quiz</h1>
         <p>
           Test your crypto vocab in 10 questions. No coins, no charts, just vibes

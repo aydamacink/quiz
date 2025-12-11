@@ -36,6 +36,38 @@ body {
   width: 100%;
 }
 
+.welcome-screen {
+  width: min(100%, 28rem);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  text-align: center;
+  min-height: clamp(320px, 70vh, 520px);
+  padding: clamp(2rem, 6vw, 3rem) clamp(1.8rem, 6vw, 3rem);
+  border-radius: 26px;
+  background: rgba(2, 6, 23, 0.45);
+  box-shadow: 0 20px 40px rgba(2, 6, 23, 0.65);
+}
+
+.welcome-screen h1 {
+  margin-bottom: 0.25rem;
+}
+
+.welcome-screen p {
+  margin: 0;
+  line-height: 1.6;
+  color: #e2e8f0;
+  max-width: 42ch;
+}
+
+.welcome-screen button {
+  margin-top: 0.5rem;
+  max-width: 15rem;
+}
+
 .app-card {
   width: min(100%, 720px);
   margin: 0 auto;
@@ -79,7 +111,7 @@ h1 {
 
 h2 {
   font-size: clamp(1.25rem, 1vw + 1.2rem, 1.7rem);
-  margin: 1.1rem 0 0.4rem;
+  margin: 1.25rem 0 0.65rem;
 }
 
 /* Answer list styling */
@@ -212,7 +244,7 @@ button:disabled {
 .options-grid {
   list-style: none;
   padding: 0;
-  margin: 1rem 0 0;
+  margin: 1.15rem 0 0;
   display: grid;
   grid-template-columns: 1fr;
   gap: 0.75rem;
@@ -266,7 +298,7 @@ button:disabled {
 }
 
 .explanation-card {
-  margin-top: 1rem;
+  margin-top: 1.35rem;
   padding: 1rem 1.2rem;
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.05);
@@ -375,7 +407,8 @@ button:disabled {
 
 @media (max-width: 720px) {
   body {
-    align-items: flex-start;
+    align-items: center;
+    padding: clamp(2rem, 8vw, 3rem);
   }
 
   .app-card {
