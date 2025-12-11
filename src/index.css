@@ -352,6 +352,7 @@ button:disabled {
   display: flex;
   gap: 0.9rem;
   align-items: flex-start;
+  animation: infoReveal 360ms ease-out;
 }
 
 @supports not ((backdrop-filter: blur(1px))) {
@@ -443,6 +444,17 @@ button:disabled {
   from {
     opacity: 0;
     transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes infoReveal {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
