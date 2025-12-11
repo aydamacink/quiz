@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { QUESTIONS } from "./data/terms";
 import {
   pickRandomQuestions,
@@ -21,8 +21,6 @@ function App() {
   const [selectedOption, setSelectedOption] = useState<QuizOption | null>(null);
   const [score, setScore] = useState(0);
 
-  // --- handlers ---
-
   function startQuiz() {
     const qs = pickRandomQuestions(QUESTIONS, 10);
     setCurrentQuestions(qs);
@@ -35,7 +33,7 @@ function App() {
   }
 
   function handleOptionClick(option: QuizOption) {
-    if (hasAnswered) return; // prevent changing answer
+    if (hasAnswered) return;
 
     setSelectedOption(option);
     setHasAnswered(true);
@@ -62,56 +60,80 @@ function App() {
     startQuiz();
   }
 
-  // --- RENDERING ---
+  const totalQuestions = currentQuestions.length;
+  const progress = useMemo(() => {
+    if (phase !== "quiz") return 0;
+    return Math.round(((currentIndex + 1) / totalQuestions) * 100);
+  }, [currentIndex, phase, totalQuestions]);
 
-  // 1) Welcome screen
+  // 1) Welcome
   if (phase === "welcome") {
     return (
-      <main className="fade-in">
+      <main className="app-card fade-in">
+        <p className="eyebrow">10 bite-sized questions</p>
         <h1>Crypto Jargon Quiz</h1>
-        <p>
-          Test your crypto vocab in 10 questions. No coins, no charts, just vibes
-          and learning.
+        <p className="description">
+          Learn the most common onchain jargon in a snackable format built for
+          any screen size.
         </p>
+        <ul className="feature-list">
+          <li>Fresh set of questions every run</li>
+          <li>Tap-friendly answer cards</li>
+          <li>Instant context on every term</li>
+        </ul>
         <button onClick={startQuiz}>Start quiz</button>
       </main>
     );
   }
 
-  // 2) Quiz screen
+  // 2) Quiz
   if (phase === "quiz") {
     const question = currentQuestions[currentIndex];
 
     return (
-      <main className="fade-in">
-        <div className="quiz-meta" style={{ marginBottom: "0.75rem" }}>
-          Question {currentIndex + 1} of {currentQuestions.length}
+      <main className="app-card fade-in" aria-live="polite">
+        <div className="quiz-header">
+          <div className="quiz-meta">
+            Question {currentIndex + 1} of {currentQuestions.length}
+          </div>
+          <div className="progress" role="img" aria-label={`Progress ${progress}%`}>
+            <span className="progress-bar" style={{ width: `${progress}%` }} />
+          </div>
         </div>
 
-        <h2>{question.term}</h2>
-        <p>What does this actually mean?</p>
+        <section className="question-block">
+          <h2>{question.term}</h2>
+          <p>What does this actually mean?</p>
+        </section>
 
-        <ul>
+        <ul className="options-grid">
           {currentOptions.map((option, index) => {
             const isSelected = selectedOption === option;
             const isCorrect = option.isCorrect;
+            const optionClasses = ["option"];
 
-            // base background handled by CSS; we only override on answer
-            let background: string | undefined = undefined;
-            if (hasAnswered) {
-              if (isSelected && isCorrect) background = "#166534"; // deep green
-              else if (isSelected && !isCorrect) background = "#7f1d1d"; // deep red
-              else if (isCorrect) background = "#14532d"; // subtle green for correct
-            }
+            if (isSelected && !hasAnswered) optionClasses.push("option--active");
+            if (hasAnswered && isCorrect) optionClasses.push("option--correct");
+            if (hasAnswered && isSelected && !isCorrect)
+              optionClasses.push("option--incorrect");
+            if (hasAnswered && isCorrect && !isSelected)
+              optionClasses.push("option--reveal");
 
             return (
               <li
                 key={index}
-                style={{
-                  cursor: hasAnswered ? "default" : "pointer",
-                  background,
-                }}
+                className={optionClasses.join(" ")}
                 onClick={() => handleOptionClick(option)}
+                role="button"
+                tabIndex={0}
+                aria-pressed={isSelected}
+                aria-disabled={hasAnswered}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    handleOptionClick(option);
+                  }
+                }}
               >
                 {option.text}
               </li>
@@ -120,28 +142,28 @@ function App() {
         </ul>
 
         {hasAnswered && (
-          <div style={{ marginTop: "1rem" }}>
+          <section className="explanation-card">
             <p>
               {selectedOption?.isCorrect
                 ? "Nice! That’s correct."
                 : "Not quite. Here’s the idea:"}
             </p>
-            <p style={{ fontStyle: "italic" }}>{question.whyItMatters}</p>
-          </div>
+            <p className="explanation-text">{question.whyItMatters}</p>
+          </section>
         )}
 
-        <div style={{ marginTop: "1.5rem" }}>
+        <div className="actions">
           <button onClick={handleNext} disabled={!hasAnswered}>
             {currentIndex === currentQuestions.length - 1
               ? "See results"
-              : "Next"}
+              : "Next question"}
           </button>
         </div>
       </main>
     );
   }
 
-  // 3) Results screen
+  // 3) Results
   if (phase === "results") {
     const total = currentQuestions.length;
     const percentage = Math.round((score / total) * 100);
@@ -151,22 +173,26 @@ function App() {
     else if (percentage >= 50) label = "DeFi Teen";
 
     return (
-      <main className="fade-in">
+      <main className="app-card fade-in results-card">
+        <p className="eyebrow">Quiz complete</p>
         <h1>Your results</h1>
-        <p>
-          You scored {score} out of {total} ({percentage}%)
-        </p>
+        <div className="score-pill">
+          <strong>{score}</strong>
+          <span>out of {total}</span>
+        </div>
+        <p className="percentage">{percentage}%</p>
         <h2>{label}</h2>
-        <p>This isn’t financial advice, but it might be vocabulary therapy. 🧠</p>
+        <p className="description">
+          This isn’t financial advice, but it might be vocabulary therapy. 🧠
+        </p>
 
-        <div style={{ marginTop: "1.5rem" }}>
+        <div className="actions">
           <button onClick={handleRestart}>Play again</button>
         </div>
       </main>
     );
   }
 
-  // Fallback (should never really hit)
   return null;
 }
 
