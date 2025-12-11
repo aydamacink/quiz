@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { QUESTIONS } from "./data/terms";
 import {
   pickRandomQuestions,
@@ -7,11 +7,13 @@ import {
 } from "./quiz/utils";
 
 type Phase = "welcome" | "quiz" | "results";
+const QUIZ_LENGTH = 10;
+const QUIZ_DURATION_SECONDS = 50;
 
 function App() {
   const [phase, setPhase] = useState<Phase>("welcome");
   const [currentQuestions, setCurrentQuestions] = useState(() =>
-    pickRandomQuestions(QUESTIONS, 10)
+    pickRandomQuestions(QUESTIONS, QUIZ_LENGTH)
   );
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentOptions, setCurrentOptions] = useState<QuizOption[]>(() =>
@@ -20,15 +22,17 @@ function App() {
   const [hasAnswered, setHasAnswered] = useState(false);
   const [selectedOption, setSelectedOption] = useState<QuizOption | null>(null);
   const [score, setScore] = useState(0);
+  const [secondsLeft, setSecondsLeft] = useState(QUIZ_DURATION_SECONDS);
 
   function startQuiz() {
-    const qs = pickRandomQuestions(QUESTIONS, 10);
+    const qs = pickRandomQuestions(QUESTIONS, QUIZ_LENGTH);
     setCurrentQuestions(qs);
     setCurrentIndex(0);
     setCurrentOptions(getOptionsForQuestion(qs[0]));
     setScore(0);
     setHasAnswered(false);
     setSelectedOption(null);
+    setSecondsLeft(QUIZ_DURATION_SECONDS);
     setPhase("quiz");
   }
 
@@ -60,6 +64,25 @@ function App() {
     startQuiz();
   }
 
+  useEffect(() => {
+    if (phase !== "quiz") return;
+
+    const timer = window.setInterval(() => {
+      setSecondsLeft((prev) => {
+        if (prev <= 0) return 0;
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => window.clearInterval(timer);
+  }, [phase]);
+
+  useEffect(() => {
+    if (phase === "quiz" && secondsLeft === 0) {
+      setPhase("results");
+    }
+  }, [phase, secondsLeft]);
+
   // 1) Welcome
   if (phase === "welcome") {
     return (
@@ -81,14 +104,25 @@ function App() {
 
     // progress from 0–100 (%)
     const progressPercent = ((currentIndex + 1) / totalQuestions) * 100;
+    const minutes = Math.floor(secondsLeft / 60);
+    const seconds = secondsLeft % 60;
+    const formattedTime = `${minutes}:${seconds.toString().padStart(2, "0")}`;
+    const isTimeLow = secondsLeft <= 15;
 
     return (
       <main className="fade-in">
-        <div className="quiz-meta" style={{ marginBottom: "0.5rem" }}>
-          Question {currentIndex + 1} of {totalQuestions}
+        <div className="quiz-status">
+          <div className="quiz-meta">
+            Question {currentIndex + 1} of {totalQuestions}
+          </div>
+          <div
+            className={`timer-pill${isTimeLow ? " timer-pill--danger" : ""}`}
+            aria-live="polite"
+          >
+            ⏱ {formattedTime}
+          </div>
         </div>
 
-        {/* Progress bar */}
         <div className="quiz-progress-track">
           <div
             className="quiz-progress-fill"

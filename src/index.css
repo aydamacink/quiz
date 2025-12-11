@@ -222,6 +222,32 @@ button:disabled {
   text-transform: uppercase;
 }
 
+.quiz-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.45rem;
+}
+
+.timer-pill {
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.25rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  color: #e0f2fe;
+  background: rgba(15, 23, 42, 0.7);
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.timer-pill--danger {
+  border-color: rgba(248, 113, 113, 0.8);
+  background: rgba(127, 29, 29, 0.75);
+  color: #fee2e2;
+}
+
 .progress {
   height: 6px;
   width: 100%;
