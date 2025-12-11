@@ -96,8 +96,13 @@ function App() {
           />
         </div>
 
-        <h2>{question.term}</h2>
-        <p>What does this actually mean on-chain?</p>
+        <section
+          key={`${question.term}-${currentIndex}`}
+          className="question-block question-step"
+        >
+          <h2>{question.term}</h2>
+          <p>What does this actually mean on-chain?</p>
+        </section>
 
         <ul>
           {currentOptions.map((option, index) => {

@@ -241,6 +241,10 @@ button:disabled {
   color: #cdd5f4;
 }
 
+.question-step {
+  animation: fadeIn 240ms ease-out;
+}
+
 .options-grid {
   list-style: none;
   padding: 0;
