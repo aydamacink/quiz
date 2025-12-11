@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { QUESTIONS } from "./data/terms";
 import {
   pickRandomQuestions,
@@ -60,27 +60,15 @@ function App() {
     startQuiz();
   }
 
-  const totalQuestions = currentQuestions.length;
-  const progress = useMemo(() => {
-    if (phase !== "quiz") return 0;
-    return Math.round(((currentIndex + 1) / totalQuestions) * 100);
-  }, [currentIndex, phase, totalQuestions]);
-
   // 1) Welcome
   if (phase === "welcome") {
     return (
-      <main className="app-card fade-in">
-        <p className="eyebrow">10 bite-sized questions</p>
+      <main className="fade-in">
         <h1>Crypto Jargon Quiz</h1>
-        <p className="description">
-          Learn the most common onchain jargon in a snackable format built for
-          any screen size.
+        <p>
+          Test your crypto vocab in 10 questions. No coins, no charts, just vibes
+          and learning.
         </p>
-        <ul className="feature-list">
-          <li>Fresh set of questions every run</li>
-          <li>Tap-friendly answer cards</li>
-          <li>Instant context on every term</li>
-        </ul>
         <button onClick={startQuiz}>Start quiz</button>
       </main>
     );
@@ -89,51 +77,48 @@ function App() {
   // 2) Quiz
   if (phase === "quiz") {
     const question = currentQuestions[currentIndex];
+    const totalQuestions = currentQuestions.length;
+
+    // progress from 0–100 (%)
+    const progressPercent = ((currentIndex + 1) / totalQuestions) * 100;
 
     return (
-      <main className="app-card fade-in" aria-live="polite">
-        <div className="quiz-header">
-          <div className="quiz-meta">
-            Question {currentIndex + 1} of {currentQuestions.length}
-          </div>
-          <div className="progress" role="img" aria-label={`Progress ${progress}%`}>
-            <span className="progress-bar" style={{ width: `${progress}%` }} />
-          </div>
+      <main className="fade-in">
+        <div className="quiz-meta" style={{ marginBottom: "0.5rem" }}>
+          Question {currentIndex + 1} of {totalQuestions}
         </div>
 
-        <section className="question-block">
-          <h2>{question.term}</h2>
-          <p>What does this actually mean?</p>
-        </section>
+        {/* Progress bar */}
+        <div className="quiz-progress-track">
+          <div
+            className="quiz-progress-fill"
+            style={{ width: `${progressPercent}%` }}
+          />
+        </div>
 
-        <ul className="options-grid">
+        <h2>{question.term}</h2>
+        <p>What does this actually mean?</p>
+
+        <ul>
           {currentOptions.map((option, index) => {
             const isSelected = selectedOption === option;
             const isCorrect = option.isCorrect;
-            const optionClasses = ["option"];
 
-            if (isSelected && !hasAnswered) optionClasses.push("option--active");
-            if (hasAnswered && isCorrect) optionClasses.push("option--correct");
-            if (hasAnswered && isSelected && !isCorrect)
-              optionClasses.push("option--incorrect");
-            if (hasAnswered && isCorrect && !isSelected)
-              optionClasses.push("option--reveal");
+            let background: string | undefined = undefined;
+            if (hasAnswered) {
+              if (isSelected && isCorrect) background = "#166534";
+              else if (isSelected && !isCorrect) background = "#7f1d1d";
+              else if (isCorrect) background = "#14532d";
+            }
 
             return (
               <li
                 key={index}
-                className={optionClasses.join(" ")}
-                onClick={() => handleOptionClick(option)}
-                role="button"
-                tabIndex={0}
-                aria-pressed={isSelected}
-                aria-disabled={hasAnswered}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter" || event.key === " ") {
-                    event.preventDefault();
-                    handleOptionClick(option);
-                  }
+                style={{
+                  cursor: hasAnswered ? "default" : "pointer",
+                  background,
                 }}
+                onClick={() => handleOptionClick(option)}
               >
                 {option.text}
               </li>
@@ -142,21 +127,21 @@ function App() {
         </ul>
 
         {hasAnswered && (
-          <section className="explanation-card">
+          <div style={{ marginTop: "1rem" }}>
             <p>
               {selectedOption?.isCorrect
                 ? "Nice! That’s correct."
                 : "Not quite. Here’s the idea:"}
             </p>
-            <p className="explanation-text">{question.whyItMatters}</p>
-          </section>
+            <p style={{ fontStyle: "italic" }}>{question.whyItMatters}</p>
+          </div>
         )}
 
-        <div className="actions">
+        <div style={{ marginTop: "1.5rem" }}>
           <button onClick={handleNext} disabled={!hasAnswered}>
             {currentIndex === currentQuestions.length - 1
               ? "See results"
-              : "Next question"}
+              : "Next"}
           </button>
         </div>
       </main>
@@ -173,20 +158,15 @@ function App() {
     else if (percentage >= 50) label = "DeFi Teen";
 
     return (
-      <main className="app-card fade-in results-card">
-        <p className="eyebrow">Quiz complete</p>
+      <main className="fade-in">
         <h1>Your results</h1>
-        <div className="score-pill">
-          <strong>{score}</strong>
-          <span>out of {total}</span>
-        </div>
-        <p className="percentage">{percentage}%</p>
-        <h2>{label}</h2>
-        <p className="description">
-          This isn’t financial advice, but it might be vocabulary therapy. 🧠
+        <p>
+          You scored {score} out of {total} ({percentage}%)
         </p>
+        <h2>{label}</h2>
+        <p>This isn’t financial advice, but it might be vocabulary therapy. 🧠</p>
 
-        <div className="actions">
+        <div style={{ marginTop: "1.5rem" }}>
           <button onClick={handleRestart}>Play again</button>
         </div>
       </main>
