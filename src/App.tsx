@@ -67,7 +67,7 @@ function App() {
   // 1) Welcome screen
   if (phase === "welcome") {
     return (
-      <main style={{ padding: "2rem", maxWidth: 600, margin: "0 auto" }}>
+      <main className="fade-in">
         <h1>Crypto Jargon Quiz</h1>
         <p>
           Test your crypto vocab in 10 questions. No coins, no charts, just vibes
@@ -83,35 +83,31 @@ function App() {
     const question = currentQuestions[currentIndex];
 
     return (
-      <main style={{ padding: "2rem", maxWidth: 600, margin: "0 auto" }}>
-        <div style={{ marginBottom: "1rem" }}>
-          <strong>
-            Question {currentIndex + 1} of {currentQuestions.length}
-          </strong>
+      <main className="fade-in">
+        <div className="quiz-meta" style={{ marginBottom: "0.75rem" }}>
+          Question {currentIndex + 1} of {currentQuestions.length}
         </div>
 
         <h2>{question.term}</h2>
         <p>What does this actually mean?</p>
 
-        <ul style={{ listStyle: "none", padding: 0 }}>
+        <ul>
           {currentOptions.map((option, index) => {
             const isSelected = selectedOption === option;
             const isCorrect = option.isCorrect;
 
-            let background = "#f5f5f5";
+            // base background handled by CSS; we only override on answer
+            let background: string | undefined = undefined;
             if (hasAnswered) {
-              if (isSelected && isCorrect) background = "#c8f7c5";
-              else if (isSelected && !isCorrect) background = "#f7c5c5";
-              else if (isCorrect) background = "#e0ffe0";
+              if (isSelected && isCorrect) background = "#166534"; // deep green
+              else if (isSelected && !isCorrect) background = "#7f1d1d"; // deep red
+              else if (isCorrect) background = "#14532d"; // subtle green for correct
             }
 
             return (
               <li
                 key={index}
                 style={{
-                  padding: "0.75rem 1rem",
-                  marginBottom: "0.5rem",
-                  borderRadius: "0.5rem",
                   cursor: hasAnswered ? "default" : "pointer",
                   background,
                 }}
@@ -155,7 +151,7 @@ function App() {
     else if (percentage >= 50) label = "DeFi Teen";
 
     return (
-      <main style={{ padding: "2rem", maxWidth: 600, margin: "0 auto" }}>
+      <main className="fade-in">
         <h1>Your results</h1>
         <p>
           You scored {score} out of {total} ({percentage}%)
