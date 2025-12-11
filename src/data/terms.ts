@@ -11,6 +11,7 @@ export type Category =
   | "transactions"
   | "security"
   | "infrastructure"
+  | "base"
   | "assets";
 
 export interface QuizQuestion {
@@ -677,6 +678,656 @@ export const QUESTIONS: QuizQuestion[] = [
   whyItMatters:
     "Knowing how L2 sequencer downtime works helps users understand liveness assumptions and fallback security.",
   category: "infrastructure",
+  difficulty: "advanced"
+},
+{
+  id: "airdropclaim-1",
+  term: "Airdrop Claim",
+  correctAnswer: "The process of receiving free tokens from a project that chooses to distribute them.",
+  wrongAnswers: [
+    "A refund for failed transactions.",
+    "A fee you pay to activate new tokens."
+  ],
+  whyItMatters:
+    "Airdrops reward early users and help people explore new ecosystems safely.",
+  category: "tokens",
+  difficulty: "beginner"
+},
+{
+  id: "blockchain-1",
+  term: "Blockchain",
+  correctAnswer: "A decentralized ledger that stores transactions in blocks linked together.",
+  wrongAnswers: [
+    "A cloud folder for saving NFTs.",
+    "A password manager for wallets."
+  ],
+  whyItMatters:
+    "Blockchains are the foundation of crypto—they enable trustless, public, and verifiable systems.",
+  category: "basics",
+  difficulty: "beginner"
+},
+{
+  id: "txhash-1",
+  term: "Transaction Hash",
+  correctAnswer: "A unique ID that identifies a blockchain transaction.",
+  wrongAnswers: [
+    "Your wallet’s serial number.",
+    "A code that encrypts your private key."
+  ],
+  whyItMatters:
+    "Tx hashes help users verify transactions on explorers like Basescan.",
+  category: "transactions",
+  difficulty: "beginner"
+},
+{
+  id: "staking-1",
+  term: "Staking",
+  correctAnswer: "Locking up tokens to help secure a network and earn rewards.",
+  wrongAnswers: [
+    "Burning tokens to reduce supply.",
+    "Sending tokens to a developer to upgrade your wallet."
+  ],
+  whyItMatters:
+    "Staking is how many blockchains stay secure and how users earn passive income.",
+  category: "tokens",
+  difficulty: "beginner"
+},
+{
+  id: "metadata-1",
+  term: "NFT Metadata",
+  correctAnswer: "Information describing an NFT, such as its name, image, and traits.",
+  wrongAnswers: [
+    "A backup of all NFTs on your wallet.",
+    "The private key for your NFT."
+  ],
+  whyItMatters:
+    "Metadata defines what your NFT represents and how apps display it.",
+  category: "nfts",
+  difficulty: "beginner"
+},
+{
+  id: "network-1",
+  term: "Network",
+  correctAnswer: "A blockchain environment your wallet connects to, like Ethereum, Base, or a testnet.",
+  wrongAnswers: [
+    "Your home WiFi setting in your wallet.",
+    "A server owned by your wallet provider."
+  ],
+  whyItMatters:
+    "Choosing the right network ensures your wallet interacts with the correct chain.",
+  category: "basics",
+  difficulty: "beginner"
+},
+{
+  id: "approve-1",
+  term: "Token Approval",
+  correctAnswer: "Granting a smart contract permission to move your tokens.",
+  wrongAnswers: [
+    "Accepting the terms of a new wallet.",
+    "Verifying your identity to a bank."
+  ],
+  whyItMatters:
+    "Users must approve tokens before swapping—but approvals also carry security risks.",
+  category: "transactions",
+  difficulty: "beginner"
+},
+{
+  id: "burn-1",
+  term: "Token Burn",
+  correctAnswer: "Permanently removing tokens from circulation.",
+  wrongAnswers: [
+    "Accidentally losing access to your wallet.",
+    "A fee charged for sending tokens too fast."
+  ],
+  whyItMatters:
+    "Burning reduces supply and is sometimes used to increase token value.",
+  category: "tokens",
+  difficulty: "beginner"
+},
+{
+  id: "mintprice-1",
+  term: "Mint Price",
+  correctAnswer: "The cost required to create a new NFT during a mint.",
+  wrongAnswers: [
+    "The price of selling an NFT on a marketplace.",
+    "The amount needed to upgrade your NFT image quality."
+  ],
+  whyItMatters:
+    "Most NFT collections have a defined mint price that sets early demand.",
+  category: "nfts",
+  difficulty: "beginner"
+},
+{
+  id: "coldwallet-1",
+  term: "Cold Wallet",
+  correctAnswer: "A wallet stored offline, such as a hardware wallet, for higher security.",
+  wrongAnswers: [
+    "A wallet that charges lower gas fees.",
+    "A frozen wallet locked by the blockchain."
+  ],
+  whyItMatters:
+    "Cold wallets protect against hacks and are recommended for storing large holdings.",
+  category: "security",
+  difficulty: "beginner"
+},
+{
+  id: "slippage-tolerance-1",
+  term: "Slippage Tolerance",
+  correctAnswer: "The maximum price difference you're willing to accept on a swap.",
+  wrongAnswers: [
+    "A fee for slow transactions.",
+    "A gas setting that accelerates swaps."
+  ],
+  whyItMatters:
+    "Setting slippage prevents failed swaps or losing money in volatile markets.",
+  category: "defi",
+  difficulty: "intermediate"
+},
+{
+  id: "smartwallet-1",
+  term: "Smart Wallet",
+  correctAnswer: "A wallet powered by account abstraction that can run programmable features like gasless transactions.",
+  wrongAnswers: [
+    "A wallet that guesses your seed phrase.",
+    "A wallet controlled only by AI."
+  ],
+  whyItMatters:
+    "Smart wallets improve UX and reduce security risks while enabling recovery options.",
+  category: "contracts",
+  difficulty: "intermediate"
+},
+{
+  id: "sequencer-fee-1",
+  term: "Sequencer Fee",
+  correctAnswer: "The fee charged by a Layer 2 sequencer to process and include your transaction.",
+  wrongAnswers: [
+    "A penalty for using too much blob space.",
+    "A fee to reactivate your wallet address."
+  ],
+  whyItMatters:
+    "On Base, sequencer fees contribute to L2 transaction speed and cost.",
+  category: "transactions",
+  difficulty: "intermediate"
+},
+{
+  id: "bonding-curve-1",
+  term: "Bonding Curve",
+  correctAnswer: "A mathematical curve that determines token prices based on supply.",
+  wrongAnswers: [
+    "A tool that pairs tokens together for liquidity.",
+    "A method for smoothing gas fees."
+  ],
+  whyItMatters:
+    "Bonding curves power many NFT mints and token launches, impacting price dynamics.",
+  category: "tokens",
+  difficulty: "intermediate"
+},
+{
+  id: "rugcheck-1",
+  term: "Rug Check",
+  correctAnswer: "Research done to ensure a token or project is not a scam.",
+  wrongAnswers: [
+    "A security scan required by hardware wallets.",
+    "A government certification for new tokens."
+  ],
+  whyItMatters:
+    "Understanding risks helps users avoid scams and protect their assets.",
+  category: "security",
+  difficulty: "intermediate"
+},
+{
+  id: "crosschain-1",
+  term: "Cross-Chain Swap",
+  correctAnswer: "A token exchange between two different blockchains without needing a centralized exchange.",
+  wrongAnswers: [
+    "A swap that sends tokens to two wallets at once.",
+    "A feature that changes your seed phrase automatically."
+  ],
+  whyItMatters:
+    "Cross-chain tools help users move liquidity across ecosystems like Base and Ethereum.",
+  category: "transactions",
+  difficulty: "intermediate"
+},
+{
+  id: "gasoracle-1",
+  term: "Gas Oracle",
+  correctAnswer: "A tool that estimates the appropriate gas price based on network demand.",
+  wrongAnswers: [
+    "A bot that lowers your gas fees instantly.",
+    "A validator that adjusts block sizes."
+  ],
+  whyItMatters:
+    "Wallets rely on gas oracles to help users make reliable transactions.",
+  category: "infrastructure",
+  difficulty: "intermediate"
+},
+{
+  id: "permit-1",
+  term: "Permit Transaction",
+  correctAnswer: "A signature-based approval that allows spending tokens without an on-chain approval transaction.",
+  wrongAnswers: [
+    "A government ID verification for crypto.",
+    "A certificate proving a token is safe."
+  ],
+  whyItMatters:
+    "Permit reduces gas costs and improves UX in DeFi protocols.",
+  category: "contracts",
+  difficulty: "intermediate"
+},
+{
+  id: "unlock-1",
+  term: "Token Unlock",
+  correctAnswer: "The scheduled release of tokens previously locked or vested.",
+  wrongAnswers: [
+    "A bonus reward for long-term staking.",
+    "A freeze applied to old tokens."
+  ],
+  whyItMatters:
+    "Unlocks can impact token price and supply, influencing market behavior.",
+  category: "tokens",
+  difficulty: "intermediate"
+},
+{
+  id: "gasrefund-1",
+  term: "Gas Refund",
+  correctAnswer: "A mechanism where certain transactions get back part of the gas they spent, depending on network rules.",
+  wrongAnswers: [
+    "A refund for failed bridge transactions.",
+    "A discount for high-value swaps."
+  ],
+  whyItMatters:
+    "Some advanced smart contracts optimize for gas refunds to reduce cost.",
+  category: "transactions",
+  difficulty: "intermediate"
+},
+{
+  id: "frontrunning-1",
+  term: "Front-Running",
+  correctAnswer: "A type of MEV where a bot sees your transaction and places its own first to profit.",
+  wrongAnswers: [
+    "A penalty for sending large transactions.",
+    "A forced delay applied by the sequencer."
+  ],
+  whyItMatters:
+    "Front-running affects fairness in DeFi markets and explains why private mempools exist.",
+  category: "infrastructure",
+  difficulty: "advanced"
+},
+{
+  id: "zkvm-1",
+  term: "ZK-VM",
+  correctAnswer: "A virtual machine that can prove execution of code using zero-knowledge proofs.",
+  wrongAnswers: [
+    "A computer that stores private keys offline.",
+    "A special wallet that deletes your data automatically."
+  ],
+  whyItMatters:
+    "ZK-VMs enable scalable and private smart contract execution.",
+  category: "contracts",
+  difficulty: "advanced"
+},
+{
+  id: "flashbots-1",
+  term: "Flashbots",
+  correctAnswer: "A system for submitting bundles to block builders to mitigate harmful MEV.",
+  wrongAnswers: [
+    "A botnet that speeds up Layer 2 finality.",
+    "A hardware tool for generating hashes faster."
+  ],
+  whyItMatters:
+    "Flashbots protect users from MEV attacks and improve fairness.",
+  category: "infrastructure",
+  difficulty: "advanced"
+},
+{
+  id: "governance-attack-1",
+  term: "Governance Attack",
+  correctAnswer: "A takeover where someone acquires enough voting power to pass malicious proposals.",
+  wrongAnswers: [
+    "A legal dispute over token ownership.",
+    "A hack that deletes all proposal history."
+  ],
+  whyItMatters:
+    "Governance attacks threaten DAOs and DeFi protocols with large treasuries.",
+  category: "culture",
+  difficulty: "advanced"
+},
+{
+  id: "liquidation-1",
+  term: "Liquidation",
+  correctAnswer: "The automatic selling of collateral when a borrower's position becomes undercollateralized.",
+  wrongAnswers: [
+    "Manually selling tokens before a price drop.",
+    "A tax applied to unstaked tokens."
+  ],
+  whyItMatters:
+    "Advanced users must understand liquidation risks when borrowing in DeFi.",
+  category: "defi",
+  difficulty: "advanced"
+},
+{
+  id: "pbs-1",
+  term: "Proposer-Builder Separation (PBS)",
+  correctAnswer: "A design where block proposers and block builders are separated to reduce MEV abuse.",
+  wrongAnswers: [
+    "A method for splitting large wallets into smaller accounts.",
+    "A new type of NFT sharding mechanism."
+  ],
+  whyItMatters:
+    "PBS improves blockchain fairness and decentralization.",
+  category: "infrastructure",
+  difficulty: "advanced"
+},
+{
+  id: "crv-attack-1",
+  term: "Price Oracle Manipulation",
+  correctAnswer: "An attack where a user distorts price feeds to drain DeFi protocols.",
+  wrongAnswers: [
+    "Changing gas prices by sending spam transactions.",
+    "Editing NFT metadata to inflate rarity."
+  ],
+  whyItMatters:
+    "Oracle manipulation has caused major DeFi collapses—advanced users should recognize the risk.",
+  category: "defi",
+  difficulty: "advanced"
+},
+{
+  id: "zk-bridge-1",
+  term: "ZK Bridge",
+  correctAnswer: "A cross-chain bridge that uses validity proofs to verify state between chains.",
+  wrongAnswers: [
+    "A bridge that hides all transfer information.",
+    "A teleportation tool that moves wallets instantly."
+  ],
+  whyItMatters:
+    "ZK bridges reduce trust assumptions and make interoperability safer.",
+  category: "infrastructure",
+  difficulty: "advanced"
+},
+{
+  id: "reorg-1",
+  term: "Chain Reorg",
+  correctAnswer: "A temporary chain rollback where a different block becomes canonical.",
+  wrongAnswers: [
+    "A permanent reset of a blockchain.",
+    "A process where validators vote to delete bad transactions."
+  ],
+  whyItMatters:
+    "Reorgs impact finality and can cause replay or MEV issues.",
+  category: "chains",
+  difficulty: "advanced"
+},
+{
+  id: "attestation-1",
+  term: "Attestation",
+  correctAnswer: "A validator’s cryptographic vote confirming a block’s validity.",
+  wrongAnswers: [
+    "A certificate that proves a token is genuine.",
+    "A new method for freezing fraudulent wallets."
+  ],
+  whyItMatters:
+    "Attestations secure proof-of-stake networks and determine block finality.",
+  category: "infrastructure",
+  difficulty: "advanced"
+},
+{
+  id: "why-airdrops-1",
+  term: "Why do protocols give tokens away in airdrops?",
+  correctAnswer: "To reward early users and encourage people to try the protocol.",
+  wrongAnswers: [
+    "To reduce the total token supply quickly.",
+    "To force users to stake tokens immediately."
+  ],
+  whyItMatters:
+    "Airdrops help users understand how projects grow communities and incentivize participation.",
+  category: "tokens",
+  difficulty: "beginner"
+},
+{
+  id: "why-wallet-connection-1",
+  term: "Why do dApps require you to connect your wallet?",
+  correctAnswer: "Because they need your address to read balances and let you take on-chain actions.",
+  wrongAnswers: [
+    "Because they store your private key for safekeeping.",
+    "Because they need to verify your bank account."
+  ],
+  whyItMatters:
+    "Connecting a wallet is how users interact with decentralized apps without giving up custody.",
+  category: "basics",
+  difficulty: "beginner"
+},
+{
+  id: "why-fees-1",
+  term: "Why do blockchains charge gas fees?",
+  correctAnswer: "To pay for network resources and prevent spam transactions.",
+  wrongAnswers: [
+    "To increase token prices automatically.",
+    "To fund the development team exclusively."
+  ],
+  whyItMatters:
+    "Understanding why gas exists helps users see how blockchains stay secure and usable.",
+  category: "transactions",
+  difficulty: "beginner"
+},
+{
+  id: "why-nfts-1",
+  term: "Why do NFTs exist?",
+  correctAnswer: "To represent unique digital items that users can own and prove ownership of on-chain.",
+  wrongAnswers: [
+    "To allow copying images without limits.",
+    "To replace all cryptocurrencies with collectibles."
+  ],
+  whyItMatters:
+    "NFTs are core to digital identity, art, gaming, and membership in on-chain ecosystems.",
+  category: "nfts",
+  difficulty: "beginner"
+},
+{
+  id: "why-l2s-1",
+  term: "Why do we need Layer 2 networks?",
+  correctAnswer: "To scale Ethereum by making transactions faster and cheaper while inheriting L1 security.",
+  wrongAnswers: [
+    "To replace Layer 1 blockchains entirely.",
+    "To split wallets into multiple accounts automatically."
+  ],
+  whyItMatters:
+    "Layer 2s like Base are essential for mass adoption and real-world blockchain usage.",
+  category: "chains",
+  difficulty: "intermediate"
+},
+{
+  id: "why-liquidity-1",
+  term: "Why do DEXs need liquidity providers?",
+  correctAnswer: "Because liquidity is required for users to trade tokens without huge price swings.",
+  wrongAnswers: [
+    "Because LPs validate all network transactions.",
+    "Because LPs create new tokens whenever prices rise."
+  ],
+  whyItMatters:
+    "Understanding liquidity helps users avoid bad trading conditions and assess DeFi risks.",
+  category: "defi",
+  difficulty: "intermediate"
+},
+{
+  id: "why-oracles-1",
+  term: "Why do smart contracts use oracles?",
+  correctAnswer: "Because blockchains cannot access off-chain data like prices or real-world events.",
+  wrongAnswers: [
+    "Because oracles decide which transactions get included in blocks.",
+    "Because oracles store user passwords securely."
+  ],
+  whyItMatters:
+    "Oracles are critical infrastructure that enables lending, trading, and advanced DeFi logic.",
+  category: "infrastructure",
+  difficulty: "intermediate"
+},
+{
+  id: "why-tokenomics-1",
+  term: "Why do protocols design tokenomics?",
+  correctAnswer: "To align user incentives, fund development, and govern protocol decisions.",
+  wrongAnswers: [
+    "To guarantee all token holders a fixed profit.",
+    "To limit tokens to only early investors."
+  ],
+  whyItMatters:
+    "Tokenomics shape how projects grow, reward users, and sustain long-term ecosystems.",
+  category: "tokens",
+  difficulty: "intermediate"
+},
+{
+  id: "why-mev-1",
+  term: "Why does MEV exist?",
+  correctAnswer: "Because transaction ordering can create opportunities for profit in decentralized markets.",
+  wrongAnswers: [
+    "Because validators randomly remove transactions from blocks.",
+    "Because wallets publish private keys during swaps."
+  ],
+  whyItMatters:
+    "Understanding MEV helps advanced users recognize risks like front-running and sandwich attacks.",
+  category: "infrastructure",
+  difficulty: "advanced"
+},
+{
+  id: "why-zkrollups-1",
+  term: "Why are ZK rollups important?",
+  correctAnswer: "Because they use validity proofs to offer fast finality, high throughput, and stronger security guarantees.",
+  wrongAnswers: [
+    "Because they eliminate the need for smart contracts.",
+    "Because they make L1 fees permanently zero."
+  ],
+  whyItMatters:
+    "ZK rollups are shaping the future of scaling, privacy, and efficient blockchain verification.",
+  category: "chains",
+  difficulty: "advanced"
+},
+{
+  id: "base-why-1",
+  term: "Why was Base created?",
+  correctAnswer: "To make using Ethereum cheaper, faster, and accessible to mainstream users.",
+  wrongAnswers: [
+    "To replace Ethereum entirely.",
+    "To create a blockchain only for Coinbase employees."
+  ],
+  whyItMatters:
+    "Base brings scalable, low-cost blockchain access to millions while inheriting Ethereum security.",
+  category: "base",
+  difficulty: "beginner"
+},
+{
+  id: "base-what-1",
+  term: "What is Base?",
+  correctAnswer: "A Layer 2 blockchain built on the OP Stack and secured by Ethereum.",
+  wrongAnswers: [
+    "A centralized Coinbase database for storing crypto.",
+    "A separate blockchain that doesn’t rely on Ethereum."
+  ],
+  whyItMatters:
+    "Understanding Base helps users navigate apps, NFTs, and tools built on this L2 ecosystem.",
+  category: "base",
+  difficulty: "beginner"
+},
+{
+  id: "base-bridge-1",
+  term: "Why do users bridge ETH to Base?",
+  correctAnswer: "To pay for gas and interact with apps on the Base network.",
+  wrongAnswers: [
+    "Because ETH can’t stay on Ethereum anymore.",
+    "Because Base only works with brand-new tokens."
+  ],
+  whyItMatters:
+    "ETH is required to use Base, just like gas is needed on any smart contract network.",
+  category: "base",
+  difficulty: "beginner"
+},
+{
+  id: "base-sequencer-what-1",
+  term: "What does the Base sequencer do?",
+  correctAnswer: "It orders and processes Layer 2 transactions before sending them to Ethereum.",
+  wrongAnswers: [
+    "It stores all NFTs created on Base.",
+    "It changes token prices during swaps."
+  ],
+  whyItMatters:
+    "The sequencer is central to Base’s speed and low-cost transactions.",
+  category: "base",
+  difficulty: "beginner"
+},
+{
+  id: "base-opstack-1",
+  term: "Why does Base use the OP Stack?",
+  correctAnswer: "Because it provides a modular, open-source framework for building secure and scalable L2s.",
+  wrongAnswers: [
+    "Because it’s the only way to create NFTs.",
+    "Because it removes the need for smart contracts."
+  ],
+  whyItMatters:
+    "The OP Stack allows Base to benefit from shared upgrades and Ethereum-aligned infrastructure.",
+  category: "base",
+  difficulty: "intermediate"
+},
+{
+  id: "base-pessimism-1",
+  term: "What is Pessimism on Base?",
+  correctAnswer: "A security monitoring system that detects suspicious activity and protects users.",
+  wrongAnswers: [
+    "A gas discount program for high-volume traders.",
+    "A tool that deletes failed transactions from Basescan."
+  ],
+  whyItMatters:
+    "Understanding Pessimism shows how Base prioritizes safety for users and developers.",
+  category: "base",
+  difficulty: "intermediate"
+},
+{
+  id: "base-fees-why-1",
+  term: "Why are fees lower on Base compared to Ethereum?",
+  correctAnswer: "Because Base batches transactions and posts them to Ethereum, reducing per-user costs.",
+  wrongAnswers: [
+    "Because Base has unlimited free block space.",
+    "Because Base doesn’t use gas at all."
+  ],
+  whyItMatters:
+    "Base’s low fees enable everyday on-chain actions like minting, gaming, and microtransactions.",
+  category: "base",
+  difficulty: "intermediate"
+},
+{
+  id: "base-dapps-why-1",
+  term: "Why do many dApps choose to launch on Base?",
+  correctAnswer: "Because Base offers low fees, fast transactions, a large user base, and strong developer support.",
+  wrongAnswers: [
+    "Because Base forces all projects to migrate.",
+    "Because Base has no competition from other L2s."
+  ],
+  whyItMatters:
+    "Understanding why developers choose Base explains the network’s rapid ecosystem growth.",
+  category: "base",
+  difficulty: "intermediate"
+},
+{
+  id: "base-fraudproofs-1",
+  term: "Why does Base rely on Ethereum for security instead of running its own consensus?",
+  correctAnswer: "Because optimistic rollups inherit Ethereum’s security model through fraud proofs and data posting.",
+  wrongAnswers: [
+    "Because Base cannot validate any transactions itself.",
+    "Because Ethereum automatically controls all L2s."
+  ],
+  whyItMatters:
+    "Security inheritance explains why Base is trust-minimized despite being a fast L2.",
+  category: "base",
+  difficulty: "advanced"
+},
+{
+  id: "base-liveness-1",
+  term: "Why can Base continue functioning even if the sequencer goes offline?",
+  correctAnswer: "Because users can submit transactions directly to Ethereum as a fallback for censorship resistance.",
+  wrongAnswers: [
+    "Because Base nodes automatically turn into validators.",
+    "Because the network switches to proof-of-work temporarily."
+  ],
+  whyItMatters:
+    "Understanding fallback behavior helps advanced users evaluate Base’s decentralization and liveness guarantees.",
+  category: "base",
   difficulty: "advanced"
 }
 ];
