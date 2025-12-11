@@ -269,12 +269,27 @@ button:disabled {
   cursor: pointer;
   user-select: none;
   touch-action: manipulation;
+  outline: none;
 }
 
 .option:hover {
   box-shadow: 0 10px 24px rgba(15, 23, 42, 0.9);
   transform: translateY(-1px);
   border-color: rgba(56, 189, 248, 0.6);
+}
+
+.option:focus-visible {
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.6);
+  border-color: rgba(56, 189, 248, 0.9);
+}
+
+@media (hover: none) {
+  .option:active {
+    transform: scale(0.98);
+    border-color: rgba(56, 189, 248, 0.8);
+    background: rgba(30, 41, 59, 0.95);
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.8);
+  }
 }
 
 .option--active {
