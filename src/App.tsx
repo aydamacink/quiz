@@ -127,14 +127,19 @@ function App() {
         </ul>
 
         {hasAnswered && (
-          <div style={{ marginTop: "1rem" }}>
-            <p>
-              {selectedOption?.isCorrect
-                ? "Nice! That’s correct."
-                : "Not quite. Here’s the idea:"}
-            </p>
-            <p style={{ fontStyle: "italic" }}>{question.whyItMatters}</p>
-          </div>
+          <section className="explanation-card" aria-live="polite">
+            <div className="explanation-card__icon" aria-hidden="true">
+              💡
+            </div>
+            <div className="explanation-card__content">
+              <p className="explanation-card__title">
+                {selectedOption?.isCorrect
+                  ? "Nice! That’s correct."
+                  : "Not quite. Here’s the idea:"}
+              </p>
+              <p className="explanation-text">{question.whyItMatters}</p>
+            </div>
+          </section>
         )}
 
         <div style={{ marginTop: "1.5rem" }}>
