@@ -97,7 +97,7 @@ function App() {
         </div>
 
         <h2>{question.term}</h2>
-        <p>What does this actually mean?</p>
+        <p>What does this actually mean on-chain?</p>
 
         <ul>
           {currentOptions.map((option, index) => {
@@ -134,8 +134,8 @@ function App() {
             <div className="explanation-card__content">
               <p className="explanation-card__title">
                 {selectedOption?.isCorrect
-                  ? "Nice! That’s correct."
-                  : "Not quite. Here’s the idea:"}
+                  ? "Nailed it 🔥"
+                  : "🤕 Let’s break it down:"}
               </p>
               <p className="explanation-text">{question.whyItMatters}</p>
             </div>
