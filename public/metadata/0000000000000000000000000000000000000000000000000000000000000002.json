@@ -1,0 +1,10 @@
+{
+  "name": "Crypto Jargon Quiz — DeFi Teen",
+  "description": "Minted for completing the Crypto Jargon Quiz. Tier: DeFi Teen.",
+  "image": "https://cryptoquiz-omega.vercel.app/badges/2.png",
+  "external_url": "https://cryptoquiz-omega.vercel.app/",
+  "attributes": [
+    { "trait_type": "Tier", "value": "DeFi Teen" },
+    { "trait_type": "Network", "value": "Base Sepolia" }
+  ]
+}

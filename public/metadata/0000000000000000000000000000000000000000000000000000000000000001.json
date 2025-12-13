@@ -1,0 +1,10 @@
+{
+  "name": "Crypto Jargon Quiz — Crypto Curious",
+  "description": "Minted for completing the Crypto Jargon Quiz. Tier: Crypto Curious.",
+  "image": "https://cryptoquiz-omega.vercel.app/badges/1.png",
+  "external_url": "https://cryptoquiz-omega.vercel.app/",
+  "attributes": [
+    { "trait_type": "Tier", "value": "Crypto Curious" },
+    { "trait_type": "Network", "value": "Base Sepolia" }
+  ]
+}

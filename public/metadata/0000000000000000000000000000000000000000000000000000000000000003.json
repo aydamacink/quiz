@@ -1,0 +1,10 @@
+{
+  "name": "Crypto Jargon Quiz — On-Chain Adult",
+  "description": "Minted for completing the Crypto Jargon Quiz. Tier: On-Chain Adult.",
+  "image": "https://cryptoquiz-omega.vercel.app/badges/3.png",
+  "external_url": "https://cryptoquiz-omega.vercel.app/",
+  "attributes": [
+    { "trait_type": "Tier", "value": "On-Chain Adult" },
+    { "trait_type": "Network", "value": "Base Sepolia" }
+  ]
+}

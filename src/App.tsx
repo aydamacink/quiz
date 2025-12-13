@@ -40,7 +40,7 @@ function App() {
 
   const isOnBaseSepolia = chainId === 84532;
 
-  function handleMintBadge() {
+  function handleMintBadge(tokenId: bigint) {
     writeContract({
       address: QUIZ_BADGE_CONTRACT,
       abi: [
@@ -48,14 +48,15 @@ function App() {
           name: "mintBadge",
           type: "function",
           stateMutability: "nonpayable",
-          inputs: [],
-          outputs: [],
+          inputs: [{ name: "id", type: "uint256" }],
+         outputs: [],
         },
       ],
       functionName: "mintBadge",
-      args: [],
+      args: [tokenId],
     });
   }
+
 
   function startQuiz() {
     const qs = pickRandomQuestions(QUESTIONS, QUIZ_LENGTH);
@@ -221,8 +222,16 @@ function App() {
     const percentage = Math.round((score / total) * 100);
 
     let label = "Crypto Curious";
-    if (percentage >= 80) label = "On-Chain Adult";
-    else if (percentage >= 50) label = "DeFi Teen";
+    let tokenId = 1n;
+
+    if (percentage >= 80) {
+      label = "On-Chain Adult";
+      tokenId = 3n;
+    } else if (percentage >= 50) {
+      label = "DeFi Teen";
+      tokenId = 2n;
+    }
+
 
     return (
       <main className="fade-in">
@@ -267,7 +276,7 @@ function App() {
             ) : (
               <>
                 <button
-                  onClick={handleMintBadge}
+                  onClick={() => handleMintBadge(tokenId)}
                   disabled={isMinting || mintSuccess}
                   style={{ marginTop: "0.75rem" }}
                 >
