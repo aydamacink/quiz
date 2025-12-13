@@ -1,0 +1,4 @@
+export const QUIZ_BADGE_CONTRACT =
+  "0xC1D24500d6EF2D780f878d332AEF8AEb71E49dBc" as const;
+
+export const QUIZ_BADGE_ID = 1n;

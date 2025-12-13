@@ -1,3 +1,7 @@
+import { useAccount, useWriteContract } from "wagmi";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { QUIZ_BADGE_CONTRACT } from "./chain";
+
 import { useEffect, useState } from "react";
 import { QUESTIONS } from "./data/terms";
 import {
@@ -24,6 +28,35 @@ function App() {
   const [score, setScore] = useState(0);
   const [secondsLeft, setSecondsLeft] = useState(QUIZ_DURATION_SECONDS);
 
+  // --- Wallet + mint badge ---
+  const { address, isConnected, chainId } = useAccount();
+
+  const {
+    writeContract,
+    isPending: isMinting,
+    isSuccess: mintSuccess,
+    error: mintError,
+  } = useWriteContract();
+
+  const isOnBaseSepolia = chainId === 84532;
+
+  function handleMintBadge() {
+    writeContract({
+      address: QUIZ_BADGE_CONTRACT,
+      abi: [
+        {
+          name: "mintBadge",
+          type: "function",
+          stateMutability: "nonpayable",
+          inputs: [],
+          outputs: [],
+        },
+      ],
+      functionName: "mintBadge",
+      args: [],
+    });
+  }
+
   function startQuiz() {
     const qs = pickRandomQuestions(QUESTIONS, QUIZ_LENGTH);
     setCurrentQuestions(qs);
@@ -41,9 +74,7 @@ function App() {
 
     setSelectedOption(option);
     setHasAnswered(true);
-    if (option.isCorrect) {
-      setScore((prev) => prev + 1);
-    }
+    if (option.isCorrect) setScore((prev) => prev + 1);
   }
 
   function handleNext() {
@@ -68,10 +99,7 @@ function App() {
     if (phase !== "quiz") return;
 
     const timer = window.setInterval(() => {
-      setSecondsLeft((prev) => {
-        if (prev <= 0) return 0;
-        return prev - 1;
-      });
+      setSecondsLeft((prev) => (prev <= 0 ? 0 : prev - 1));
     }, 1000);
 
     return () => window.clearInterval(timer);
@@ -102,7 +130,6 @@ function App() {
     const question = currentQuestions[currentIndex];
     const totalQuestions = currentQuestions.length;
 
-    // progress from 0–100 (%)
     const progressPercent = ((currentIndex + 1) / totalQuestions) * 100;
     const minutes = Math.floor(secondsLeft / 60);
     const seconds = secondsLeft % 60;
@@ -172,9 +199,7 @@ function App() {
             </div>
             <div className="explanation-card__content">
               <p className="explanation-card__title">
-                {selectedOption?.isCorrect
-                  ? "Nailed it 🔥"
-                  : "🤕 Let’s break it down:"}
+                {selectedOption?.isCorrect ? "Nailed it 🔥" : "🤕 Let’s break it down:"}
               </p>
               <p className="explanation-text">{question.whyItMatters}</p>
             </div>
@@ -183,16 +208,14 @@ function App() {
 
         <div style={{ marginTop: "1.5rem" }}>
           <button onClick={handleNext} disabled={!hasAnswered}>
-            {currentIndex === currentQuestions.length - 1
-              ? "See results"
-              : "Next"}
+            {currentIndex === currentQuestions.length - 1 ? "See results" : "Next"}
           </button>
         </div>
       </main>
     );
   }
 
-  // 3) Results
+  // 3) Results + badge mint (RainbowKit)
   if (phase === "results") {
     const total = currentQuestions.length;
     const percentage = Math.round((score / total) * 100);
@@ -210,9 +233,66 @@ function App() {
         <h2>{label}</h2>
         <p>This isn’t financial advice, but it might be vocabulary therapy. 🧠</p>
 
-        <div style={{ marginTop: "1.5rem" }}>
+        <div style={{ marginTop: "1.25rem" }}>
           <button onClick={handleRestart}>Play again</button>
         </div>
+
+        <hr
+          style={{
+            margin: "1.75rem 0",
+            borderColor: "rgba(148,163,184,0.3)",
+          }}
+        />
+
+        <h2 style={{ marginTop: 0 }}>Mint your badge</h2>
+        <p style={{ marginTop: "0.25rem" }}>
+          Claim a completion badge on <strong>Base Sepolia</strong>.
+        </p>
+
+        <div style={{ marginTop: "0.75rem" }}>
+          <ConnectButton />
+        </div>
+
+        {isConnected && (
+          <>
+            <p style={{ fontSize: "0.9rem", color: "#9ca3af", marginTop: "0.75rem" }}>
+              Connected: {address?.slice(0, 6)}…{address?.slice(-4)}
+            </p>
+
+            {!isOnBaseSepolia ? (
+              <p style={{ marginTop: "0.75rem", color: "#fbbf24" }}>
+                Your wallet is on the wrong network. Please switch to{" "}
+                <strong>Base Sepolia</strong> (chain ID 84532) and try again.
+              </p>
+            ) : (
+              <>
+                <button
+                  onClick={handleMintBadge}
+                  disabled={isMinting || mintSuccess}
+                  style={{ marginTop: "0.75rem" }}
+                >
+                  {mintSuccess
+                    ? "Badge minted ✅"
+                    : isMinting
+                    ? "Minting…"
+                    : "Mint completion badge"}
+                </button>
+
+                {mintError && (
+                  <p style={{ marginTop: "0.75rem", color: "#fca5a5" }}>
+                    {mintError.message.split("\n")[0]}
+                  </p>
+                )}
+
+                {mintSuccess && (
+                  <p style={{ marginTop: "0.75rem" }}>
+                    🎉 Done! Your badge has been minted on Base Sepolia.
+                  </p>
+                )}
+              </>
+            )}
+          </>
+        )}
       </main>
     );
   }
