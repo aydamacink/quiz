@@ -1,18 +1,40 @@
-import { useAccount, useWriteContract } from "wagmi";
+import {
+  useAccount,
+  useReadContract,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { QUIZ_BADGE_CONTRACT } from "./chain";
-
 import { useEffect, useState } from "react";
+
+import { QUIZ_BADGE_CONTRACT } from "./chain";
 import { QUESTIONS } from "./data/terms";
 import {
-  pickRandomQuestions,
   getOptionsForQuestion,
+  pickRandomQuestions,
   type QuizOption,
 } from "./quiz/utils";
 
 type Phase = "welcome" | "quiz" | "results";
 const QUIZ_LENGTH = 10;
 const QUIZ_DURATION_SECONDS = 50;
+
+const QUIZ_BADGE_ABI = [
+  {
+    name: "mintBadge",
+    type: "function",
+    stateMutability: "nonpayable",
+    inputs: [{ name: "id", type: "uint256" }],
+    outputs: [],
+  },
+  {
+    name: "hasMinted",
+    type: "function",
+    stateMutability: "view",
+    inputs: [{ name: "", type: "address" }],
+    outputs: [{ name: "", type: "bool" }],
+  },
+] as const;
 
 function App() {
   const [phase, setPhase] = useState<Phase>("welcome");
@@ -30,33 +52,40 @@ function App() {
 
   // --- Wallet + mint badge ---
   const { address, isConnected, chainId } = useAccount();
+  const isOnBaseSepolia = chainId === 84532;
 
   const {
+    data: mintTxHash,
     writeContract,
     isPending: isMinting,
-    isSuccess: mintSuccess,
     error: mintError,
   } = useWriteContract();
 
-  const isOnBaseSepolia = chainId === 84532;
+  const { isLoading: isConfirming, isSuccess: isConfirmed } =
+    useWaitForTransactionReceipt({
+      hash: mintTxHash,
+    });
+
+  const { data: alreadyMinted } = useReadContract({
+    address: QUIZ_BADGE_CONTRACT,
+    abi: QUIZ_BADGE_ABI,
+    functionName: "hasMinted",
+    args: address ? [address] : undefined,
+    query: {
+      enabled: !!address,
+    },
+  });
+
+  const disableMint = !!alreadyMinted || isMinting || isConfirming || isConfirmed;
 
   function handleMintBadge(tokenId: bigint) {
     writeContract({
       address: QUIZ_BADGE_CONTRACT,
-      abi: [
-        {
-          name: "mintBadge",
-          type: "function",
-          stateMutability: "nonpayable",
-          inputs: [{ name: "id", type: "uint256" }],
-         outputs: [],
-        },
-      ],
+      abi: QUIZ_BADGE_ABI,
       functionName: "mintBadge",
       args: [tokenId],
     });
   }
-
 
   function startQuiz() {
     const qs = pickRandomQuestions(QUESTIONS, QUIZ_LENGTH);
@@ -200,7 +229,9 @@ function App() {
             </div>
             <div className="explanation-card__content">
               <p className="explanation-card__title">
-                {selectedOption?.isCorrect ? "Nailed it 🔥" : "🤕 Let’s break it down:"}
+                {selectedOption?.isCorrect
+                  ? "Nailed it 🔥"
+                  : "🤕 Let’s break it down:"}
               </p>
               <p className="explanation-text">{question.whyItMatters}</p>
             </div>
@@ -232,6 +263,8 @@ function App() {
       tokenId = 2n;
     }
 
+    const basescanBase =
+      chainId === 8453 ? "https://basescan.org" : "https://sepolia.basescan.org";
 
     return (
       <main className="fade-in">
@@ -277,15 +310,25 @@ function App() {
               <>
                 <button
                   onClick={() => handleMintBadge(tokenId)}
-                  disabled={isMinting || mintSuccess}
+                  disabled={disableMint}
                   style={{ marginTop: "0.75rem" }}
                 >
-                  {mintSuccess
-                    ? "Badge minted ✅"
+                  {alreadyMinted
+                    ? "Badge already minted ✅"
+                    : isConfirmed
+                    ? "Confirmed ✅"
+                    : isConfirming
+                    ? "Confirming…"
                     : isMinting
                     ? "Minting…"
                     : "Mint completion badge"}
                 </button>
+
+                {alreadyMinted && (
+                  <p style={{ marginTop: "0.75rem", color: "#fbbf24" }}>
+                    You already minted a badge with this wallet.
+                  </p>
+                )}
 
                 {mintError && (
                   <p style={{ marginTop: "0.75rem", color: "#fca5a5" }}>
@@ -293,10 +336,24 @@ function App() {
                   </p>
                 )}
 
-                {mintSuccess && (
+                {mintTxHash && (
                   <p style={{ marginTop: "0.75rem" }}>
-                    🎉 Done! Your badge has been minted on Base Sepolia.
+                    <a
+                      href={`${basescanBase}/tx/${mintTxHash}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      View transaction on BaseScan ↗
+                    </a>
                   </p>
+                )}
+
+                {isConfirming && (
+                  <p style={{ marginTop: "0.5rem" }}>⏳ Confirming on-chain…</p>
+                )}
+
+                {isConfirmed && (
+                  <p style={{ marginTop: "0.5rem" }}>✅ Confirmed on-chain!</p>
                 )}
               </>
             )}
