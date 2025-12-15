@@ -4,18 +4,17 @@
     <!-- Basic -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Crypto Jargon Quiz</title>
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/icon.png" />
-
-    <!-- Description -->
     <meta
       name="description"
       content="Test your crypto vocab in 10 questions. No charts, just vibes and learning."
     />
 
-    <!-- Open Graph -->
+    <!-- Favicon (use your real icon, not vite.svg) -->
+    <link rel="icon" type="image/png" href="/icon.png" />
+
+    <!-- Open Graph / social preview -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Crypto Jargon Quiz" />
     <meta
@@ -40,20 +39,18 @@
       content="https://cryptoquiz-omega.vercel.app/og-crypto-quiz.png"
     />
 
-    <!-- Farcaster Mini App Embed -->
-    <meta property="fc:frame" content="vNext" />
+    <!-- Farcaster Mini App Embed (NEW / correct) -->
     <meta
-      property="fc:frame:image"
-      content="https://cryptoquiz-omega.vercel.app/og-crypto-quiz.png"
-    />
-    <meta property="fc:frame:button:1" content="Open Quiz" />
-    <meta property="fc:frame:button:1:action" content="link" />
-    <meta
-      property="fc:frame:button:1:target"
-      content="https://cryptoquiz-omega.vercel.app/"
+      name="fc:miniapp"
+      content='{"version":"1","imageUrl":"https://cryptoquiz-omega.vercel.app/embed.png","button":{"title":"Open Quiz","action":{"type":"launch_frame","name":"Crypto Jargon Quiz","url":"https://cryptoquiz-omega.vercel.app/","splashImageUrl":"https://cryptoquiz-omega.vercel.app/icon.png","splashBackgroundColor":"#020617"}}}'
     />
 
-    <!-- Theme -->
+    <!-- Optional backward compatibility (same JSON format) -->
+    <meta
+      name="fc:frame"
+      content='{"version":"1","imageUrl":"https://cryptoquiz-omega.vercel.app/embed.png","button":{"title":"Open Quiz","action":{"type":"launch_frame","name":"Crypto Jargon Quiz","url":"https://cryptoquiz-omega.vercel.app/","splashImageUrl":"https://cryptoquiz-omega.vercel.app/icon.png","splashBackgroundColor":"#020617"}}}'
+    />
+
     <meta name="theme-color" content="#020617" />
   </head>
 
