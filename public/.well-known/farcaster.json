@@ -1,8 +1,8 @@
 {
   "accountAssociation": {
-    "header": "eip191",
-    "payload": "{\"address\":\"0xCAFbb1492b190B1ACdEca91b20B8A27Ffa6FeE8d\"}",
-    "signature": "0x6c2724be7a75efa92acaa2c3c38dd85b3cb24179ac9dcf45980919b87b2e6fc224cb46c4fb128568addde0c2a96328f077b4a7903563efcb06ea8c16b17eea9c1c"
+    "header": "eyJmaWQiOjExMDg2NTQsInR5cGUiOiJjdXN0b2R5Iiwia2V5IjoiMHhEMzEzMzU2ZjVlMUEzZUFlMjQwOEFkZjJGNjRiMWVEM2EzQjg2NjdBIn0",
+    "payload": "eyJkb21haW4iOiJjcnlwdG9xdWl6LW9tZWdhLnZlcmNlbC5hcHAifQ",
+    "signature": "BiBLM55+ykqxCRiPJP1tJArbnPlVxgHUkurF7tMrhkFqp34Ed5CmRNcMc58qm4OiATSOB1K2I/D1GHhX+nF/ARs="
   },
   "miniapp": {
     "version": "1",
