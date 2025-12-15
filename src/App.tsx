@@ -96,6 +96,8 @@ export default function App({ isMiniApp = false }: { isMiniApp?: boolean }) {
 
   const basescanBase = isBaseMainnet
     ? "https://basescan.org"
+    : isBaseSepolia
+    ? "https://sepolia.basescan.org"
     : "https://sepolia.basescan.org";
 
   /* -------------------- Minting -------------------- */
@@ -214,20 +216,34 @@ export default function App({ isMiniApp = false }: { isMiniApp?: boolean }) {
 
   if (phase === "quiz") {
     const question = currentQuestions[currentIndex];
+
     return (
       <main className="fade-in">
         <h2>{question.term}</h2>
+
         <ul>
-          {currentOptions.map((o, i) => (
-            <li
-              key={i}
-              onClick={() => handleOptionClick(o)}
-              style={{ cursor: hasAnswered ? "default" : "pointer" }}
-            >
-              {o.text}
-            </li>
-          ))}
+          {currentOptions.map((o, i) => {
+            const isSelected = selectedOption?.text === o.text;
+
+            return (
+              <li
+                key={i}
+                onClick={() => handleOptionClick(o)}
+                style={{
+                  cursor: hasAnswered ? "default" : "pointer",
+                  fontWeight: isSelected ? 700 : 400,
+                  opacity: hasAnswered && !isSelected ? 0.6 : 1,
+                  textDecoration:
+                    hasAnswered && o.isCorrect ? "underline" : "none",
+                }}
+              >
+                {o.text}
+                {hasAnswered && isSelected && (o.isCorrect ? " ✅" : " ❌")}
+              </li>
+            );
+          })}
         </ul>
+
         {hasAnswered && (
           <button onClick={handleNext}>
             {currentIndex === currentQuestions.length - 1
@@ -235,6 +251,10 @@ export default function App({ isMiniApp = false }: { isMiniApp?: boolean }) {
               : "Next"}
           </button>
         )}
+
+        <p style={{ marginTop: "1rem", opacity: 0.7 }}>
+          Time left: {secondsLeft}s
+        </p>
       </main>
     );
   }
