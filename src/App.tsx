@@ -5,6 +5,7 @@ import {
   useWriteContract,
 } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { sdk } from "@farcaster/miniapp-sdk";
 import { useEffect, useState } from "react";
 
 import { QUIZ_BADGE_CONTRACT } from "./chain";
@@ -50,6 +51,15 @@ function App() {
   const [score, setScore] = useState(0);
   const [secondsLeft, setSecondsLeft] = useState(QUIZ_DURATION_SECONDS);
 
+  // Farcaster Mini App: tell the host we're ready (safe no-op in normal browsers)
+  useEffect(() => {
+    if (!sdk?.actions?.ready) return;
+
+    sdk.actions.ready().catch(() => {
+      // no-op: safe outside Farcaster clients
+    });
+  }, []);
+
   // --- Wallet + mint badge ---
   const { address, isConnected, chainId } = useAccount();
   const isOnBaseSepolia = chainId === 84532;
@@ -71,9 +81,7 @@ function App() {
     abi: QUIZ_BADGE_ABI,
     functionName: "hasMinted",
     args: address ? [address] : undefined,
-    query: {
-      enabled: !!address,
-    },
+    query: { enabled: !!address },
   });
 
   const disableMint = !!alreadyMinted || isMinting || isConfirming || isConfirmed;
@@ -297,7 +305,13 @@ function App() {
 
         {isConnected && (
           <>
-            <p style={{ fontSize: "0.9rem", color: "#9ca3af", marginTop: "0.75rem" }}>
+            <p
+              style={{
+                fontSize: "0.9rem",
+                color: "#9ca3af",
+                marginTop: "0.75rem",
+              }}
+            >
               Connected: {address?.slice(0, 6)}…{address?.slice(-4)}
             </p>
 

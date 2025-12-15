@@ -1,0 +1,24 @@
+{
+  "accountAssociation": {
+    "header": "",
+    "payload": "",
+    "signature": ""
+  },
+  "miniapp": {
+    "version": "1",
+    "name": "Crypto Jargon Quiz",
+    "homeUrl": "https://cryptoquiz-omega.vercel.app",
+    "iconUrl": "https://cryptoquiz-omega.vercel.app/favicon.ico",
+    "splashImageUrl": "https://cryptoquiz-omega.vercel.app/og-crypto-quiz.png",
+    "splashBackgroundColor": "#020617",
+    "subtitle": "Learn crypto vocab fast",
+    "description": "A jargon quiz for crypto newbies. Finish the quiz, mint your badge.",
+    "primaryCategory": "education",
+    "tags": ["crypto", "quiz", "base", "learn"],
+    "heroImageUrl": "https://cryptoquiz-omega.vercel.app/og-crypto-quiz.png",
+    "ogTitle": "Crypto Jargon Quiz",
+    "ogDescription": "Learn the lingo. Mint your badge.",
+    "ogImageUrl": "https://cryptoquiz-omega.vercel.app/og-crypto-quiz.png",
+    "noindex": true
+  }
+}
