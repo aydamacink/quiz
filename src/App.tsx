@@ -1,12 +1,13 @@
 import {
   useAccount,
+  useConnect,
   useReadContract,
   useWaitForTransactionReceipt,
   useWriteContract,
 } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { sdk } from "@farcaster/miniapp-sdk";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { QUIZ_BADGE_CONTRACT } from "./chain";
 import { QUESTIONS } from "./data/terms";
@@ -37,7 +38,7 @@ const QUIZ_BADGE_ABI = [
   },
 ] as const;
 
-function App() {
+export default function App({ isMiniApp }: { isMiniApp?: boolean }) {
   const [phase, setPhase] = useState<Phase>("welcome");
   const [currentQuestions, setCurrentQuestions] = useState(() =>
     pickRandomQuestions(QUESTIONS, QUIZ_LENGTH)
@@ -54,15 +55,19 @@ function App() {
   // Farcaster Mini App: tell the host we're ready (safe no-op in normal browsers)
   useEffect(() => {
     if (!sdk?.actions?.ready) return;
-
-    sdk.actions.ready().catch(() => {
-      // no-op: safe outside Farcaster clients
-    });
+    sdk.actions.ready().catch(() => {});
   }, []);
 
   // --- Wallet + mint badge ---
   const { address, isConnected, chainId } = useAccount();
   const isOnBaseSepolia = chainId === 84532;
+
+  const {
+    connectors,
+    connect,
+    isPending: isConnecting,
+    error: connectError,
+  } = useConnect();
 
   const {
     data: mintTxHash,
@@ -86,6 +91,19 @@ function App() {
 
   const disableMint = !!alreadyMinted || isMinting || isConfirming || isConfirmed;
 
+  const basescanBase =
+    chainId === 8453 ? "https://basescan.org" : "https://sepolia.basescan.org";
+
+  const miniAppConnector = useMemo(() => {
+    // In Mini App mode you should have exactly one connector from farcasterMiniApp()
+    return connectors?.[0];
+  }, [connectors]);
+
+  function handleMiniAppConnect() {
+    if (!miniAppConnector) return;
+    connect({ connector: miniAppConnector });
+  }
+
   function handleMintBadge(tokenId: bigint) {
     writeContract({
       address: QUIZ_BADGE_CONTRACT,
@@ -95,6 +113,7 @@ function App() {
     });
   }
 
+  // --- Quiz flow ---
   function startQuiz() {
     const qs = pickRandomQuestions(QUESTIONS, QUIZ_LENGTH);
     setCurrentQuestions(qs);
@@ -109,7 +128,6 @@ function App() {
 
   function handleOptionClick(option: QuizOption) {
     if (hasAnswered) return;
-
     setSelectedOption(option);
     setHasAnswered(true);
     if (option.isCorrect) setScore((prev) => prev + 1);
@@ -133,6 +151,7 @@ function App() {
     startQuiz();
   }
 
+  // Timer
   useEffect(() => {
     if (phase !== "quiz") return;
 
@@ -255,7 +274,7 @@ function App() {
     );
   }
 
-  // 3) Results + badge mint (RainbowKit)
+  // 3) Results + badge mint
   if (phase === "results") {
     const total = currentQuestions.length;
     const percentage = Math.round((score / total) * 100);
@@ -270,9 +289,6 @@ function App() {
       label = "DeFi Teen";
       tokenId = 2n;
     }
-
-    const basescanBase =
-      chainId === 8453 ? "https://basescan.org" : "https://sepolia.basescan.org";
 
     return (
       <main className="fade-in">
@@ -300,8 +316,24 @@ function App() {
         </p>
 
         <div style={{ marginTop: "0.75rem" }}>
-          <ConnectButton />
+          {isMiniApp ? (
+            <button onClick={handleMiniAppConnect} disabled={isConnecting}>
+              {isConnected
+                ? "Wallet connected ✅"
+                : isConnecting
+                ? "Connecting…"
+                : "Connect wallet"}
+            </button>
+          ) : (
+            <ConnectButton />
+          )}
         </div>
+
+        {isMiniApp && connectError && (
+          <p style={{ marginTop: "0.75rem", color: "#fca5a5" }}>
+            {connectError.message.split("\n")[0]}
+          </p>
+        )}
 
         {isConnected && (
           <>
@@ -379,5 +411,3 @@ function App() {
 
   return null;
 }
-
-export default App;
