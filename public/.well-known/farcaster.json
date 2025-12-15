@@ -1,8 +1,8 @@
 {
   "accountAssociation": {
-    "header": "",
-    "payload": "",
-    "signature": ""
+    "header": "eip191",
+    "payload": "{\"address\":\"0xCAFbb1492b190B1ACdEca91b20B8A27Ffa6FeE8d\"}",
+    "signature": "PASTE_SIGNATURE_HERE"
   },
   "miniapp": {
     "version": "1",
