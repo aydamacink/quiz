@@ -8,7 +8,7 @@
     "version": "1",
     "name": "Crypto Jargon Quiz",
     "homeUrl": "https://cryptoquiz-omega.vercel.app",
-    "iconUrl": "https://cryptoquiz-omega.vercel.app/favicon.ico",
+    "iconUrl": "https://cryptoquiz-omega.vercel.app/icon.png",
     "splashImageUrl": "https://cryptoquiz-omega.vercel.app/og-crypto-quiz.png",
     "splashBackgroundColor": "#020617",
     "subtitle": "Learn crypto vocab fast",
