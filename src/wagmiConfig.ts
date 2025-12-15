@@ -1,10 +1,24 @@
 import { getDefaultConfig } from "@rainbow-me/rainbowkit";
-import { baseSepolia } from "wagmi/chains";
+import { base, baseSepolia } from "wagmi/chains";
 
 export const wagmiConfig = getDefaultConfig({
   appName: "Crypto Jargon Quiz",
+
+  // WalletConnect Project ID (required for RainbowKit)
   projectId: import.meta.env.VITE_WALLETCONNECT_PROJECT_ID,
-  chains: [baseSepolia],
+
+  /**
+   * Dual-chain support:
+   * - Base Sepolia → browser testing
+   * - Base Mainnet → Farcaster Mini App
+   */
+  chains: [base, baseSepolia],
+
   ssr: false,
 });
-console.log("WC Project ID:", import.meta.env.VITE_WALLETCONNECT_PROJECT_ID);
+
+// Optional sanity check (safe to remove later)
+console.log(
+  "WalletConnect Project ID:",
+  import.meta.env.VITE_WALLETCONNECT_PROJECT_ID
+);
