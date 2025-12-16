@@ -3,12 +3,15 @@ import {
   useConnect,
   useDisconnect,
   useReadContract,
+  useSendCalls,
   useWaitForTransactionReceipt,
   useWriteContract,
 } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { sdk } from "@farcaster/miniapp-sdk";
 import { useEffect, useMemo, useState } from "react";
+import { encodeFunctionData, type Hex } from "viem";
+import { Attribution } from "ox/erc8021";
 
 import {
   getQuizBadgeContract,
@@ -100,7 +103,17 @@ export default function App({ isMiniApp = false }: { isMiniApp?: boolean }) {
     ? "https://sepolia.basescan.org"
     : "https://sepolia.basescan.org";
 
+  /* -------------------- Base Builder Code (Mini App attribution) -------------------- */
+  const builderCode = (import.meta.env.VITE_BASE_BUILDER_CODE as string | undefined)?.trim();
+
+  // Only use dataSuffix for Mini App on mainnet. If builderCode missing, we’ll fall back gracefully.
+  const dataSuffix: Hex | undefined =
+    isMiniApp && builderCode
+      ? (Attribution.toDataSuffix({ codes: [builderCode] }) as Hex)
+      : undefined;
+
   /* -------------------- Minting -------------------- */
+  // Browser/regular tx path
   const {
     data: mintTxHash,
     writeContract,
@@ -112,6 +125,14 @@ export default function App({ isMiniApp = false }: { isMiniApp?: boolean }) {
     useWaitForTransactionReceipt({
       hash: mintTxHash,
     });
+
+  // Mini App / sendCalls path
+  const {
+    sendCalls,
+    data: callsId,
+    isPending: isSendingCalls,
+    error: sendCallsError,
+  } = useSendCalls();
 
   const { data: alreadyMinted } = useReadContract({
     address: contractAddress,
@@ -126,6 +147,7 @@ export default function App({ isMiniApp = false }: { isMiniApp?: boolean }) {
   const disableMint =
     !!alreadyMinted ||
     isMinting ||
+    isSendingCalls ||
     isConfirming ||
     isConfirmed ||
     !isSupportedChain ||
@@ -140,9 +162,27 @@ export default function App({ isMiniApp = false }: { isMiniApp?: boolean }) {
     connect({ connector: miniAppConnector });
   }
 
-  function handleMintBadge(tokenId: bigint) {
+  async function handleMintBadge(tokenId: bigint) {
     if (!isSupportedChain || !isContractConfigured) return;
 
+    // Mini App path: sendCalls + Builder Code attribution (dataSuffix)
+    if (isMiniApp) {
+      const data = encodeFunctionData({
+        abi: QUIZ_BADGE_ABI,
+        functionName: "mintBadge",
+        args: [tokenId],
+      });
+
+      // If builder code is present, include it. If not, still sendCalls (keeps Mini App consistent).
+      await sendCalls({
+        calls: [{ to: contractAddress, data }],
+        ...(dataSuffix ? { capabilities: { dataSuffix } } : {}),
+      });
+
+      return;
+    }
+
+    // Browser path: regular writeContract (Sepolia testing)
     writeContract({
       address: contractAddress,
       abi: QUIZ_BADGE_ABI,
@@ -272,6 +312,9 @@ export default function App({ isMiniApp = false }: { isMiniApp?: boolean }) {
     tokenId = 2n;
   }
 
+  const mintErrorMessage =
+    (sendCallsError ?? mintError)?.message?.split("\n")[0] ?? null;
+
   return (
     <main className="fade-in">
       <h1>Your results</h1>
@@ -327,11 +370,14 @@ export default function App({ isMiniApp = false }: { isMiniApp?: boolean }) {
               ? "Confirmed ✅"
               : isConfirming
               ? "Confirming…"
+              : isSendingCalls
+              ? "Minting…"
               : isMinting
               ? "Minting…"
               : "Mint badge"}
           </button>
 
+          {/* Browser tx hash link (writeContract flow) */}
           {mintTxHash && (
             <a
               href={`${basescanBase}/tx/${mintTxHash}`}
@@ -342,9 +388,21 @@ export default function App({ isMiniApp = false }: { isMiniApp?: boolean }) {
             </a>
           )}
 
-          {mintError && (
-            <p style={{ color: "#fca5a5" }}>
-              {mintError.message.split("\n")[0]}
+          {/* Mini App sendCalls “id” (not always a tx hash). We can still show it for debugging. */}
+          {callsId && (
+            <p style={{ marginTop: "0.5rem", opacity: 0.7, fontSize: "0.9rem" }}>
+              Calls submitted: {String(callsId)}
+            </p>
+          )}
+
+          {mintErrorMessage && (
+            <p style={{ color: "#fca5a5" }}>{mintErrorMessage}</p>
+          )}
+
+          {/* Optional: warn if builder code missing (only in Mini App) */}
+          {isMiniApp && !builderCode && (
+            <p style={{ marginTop: "0.5rem", opacity: 0.7, fontSize: "0.9rem" }}>
+              (Heads up) Base Builder Code not found. Add VITE_BASE_BUILDER_CODE in Vercel env vars.
             </p>
           )}
         </>
