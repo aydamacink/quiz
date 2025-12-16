@@ -19,6 +19,6 @@
     "ogTitle": "Crypto Jargon Quiz",
     "ogDescription": "Learn the lingo. Mint your badge.",
     "ogImageUrl": "https://cryptoquiz-omega.vercel.app/og-crypto-quiz.png",
-    "noindex": true
+    "noindex": false
   }
 }
